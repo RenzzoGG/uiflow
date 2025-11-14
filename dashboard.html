@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIFlow Dashboard</title>
+
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+
+<body>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="assets/img/logo.png" class="sidebar-logo">
+            <h2>UIFlow</h2>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a class="active">Dashboard</a>
+            <a>Analytics</a>
+            
+        </nav>
+    </aside>
+
+    <!-- ===== MAIN APP WRAPPER ===== -->
+    <main class="main">
+
+        <!-- =======================================================
+             DASHBOARD VIEW
+        ======================================================== -->
+        <section id="view-dashboard" class="view active">
+
+            <!-- Top bar -->
+            <header class="topbar">
+                <input type="text" class="search" placeholder="Search...">
+
+                <div class="topbar-actions">
+                    <button id="themeToggle" class="theme-btn">🌙</button>
+
+                    <div class="user-box">
+                        <img src="assets/img/ui_image_1.png" class="user-avatar">
+                        <span>Renzzo</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Stats cards -->
+            <section class="cards">
+
+                <div class="card">
+                    <h3>$12,430</h3>
+                    <p>Revenue</p>
+                </div>
+
+                <div class="card">
+                    <h3>1,204</h3>
+                    <p>Active Users</p>
+                </div>
+
+                <div class="card">
+                    <h3>3m 21s</h3>
+                    <p>Avg. Session</p>
+                </div>
+
+                <div class="card">
+                    <h3>12.4%</h3>
+                    <p>Conversion</p>
+                </div>
+
+            </section>
+
+            <!-- Revenue Chart -->
+            <section class="chart-box">
+                <div class="chart-header">
+                    <h2>Revenue Overview</h2>
+
+                    <div class="chart-filters">
+                        <button class="dash-filter active" data-range="7">7D</button>
+                        <button class="dash-filter" data-range="30">30D</button>
+                        <button class="dash-filter" data-range="90">90D</button>
+                        <button class="dash-filter" data-range="365">1Y</button>
+                    </div>
+
+                </div>
+
+                <canvas id="chart"></canvas>
+            </section>
+
+            <!-- Users Table -->
+            <section class="table-box">
+                <div class="table-header">
+                    <h2>Users</h2>
+
+                    <input type="text" id="tableSearch" class="table-search" placeholder="Search users...">
+                </div>
+
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th data-col="name">Name ▲</th>
+                            <th data-col="email">Email</th>
+                            <th data-col="status">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                <div class="pagination">
+                    <button id="prevPage" class="page-btn">◀</button>
+                    <span id="pageInfo"></span>
+                    <button id="nextPage" class="page-btn">▶</button>
+                </div>
+            </section>
+
+        </section>
+
+        <!-- =======================================================
+             ANALYTICS VIEW
+        ======================================================== -->
+        <section id="view-analytics" class="view">
+
+            <h2>Analytics Overview</h2>
+            <p class="subtext">Track performance, insights and real-time application metrics.</p>
+
+            <!-- TOP STATS -->
+            <div class="analytics-stats">
+                <div class="a-card">
+                    <h3>$14,920</h3>
+                    <p>Total Revenue</p>
+                </div>
+                <div class="a-card">
+                    <h3>8,312</h3>
+                    <p>Monthly Active Users</p>
+                </div>
+                <div class="a-card">
+                    <h3>3.8%</h3>
+                    <p>Churn Rate</p>
+                </div>
+                <div class="a-card">
+                    <h3>742</h3>
+                    <p>New Signups</p>
+                </div>
+            </div>
+
+            <!-- RANGE FILTERS -->
+            <div class="a-filters">
+                <button class="analytics-filter active" data-range="7">7D</button>
+                <button class="analytics-filter" data-range="30">30D</button>
+                <button class="analytics-filter" data-range="90">90D</button>
+                <button class="analytics-filter" data-range="365">1Y</button>
+            </div>
+
+            <!-- ANALYTICS CHARTS -->
+            <div class="analytics-grid">
+
+                <div class="analytics-card">
+                    <h3>Revenue</h3>
+                    <canvas id="analyticsChart"></canvas>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Users Growth</h3>
+                    <canvas id="analyticsChartUsers"></canvas>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Device Distribution</h3>
+                    <canvas id="analyticsChartDevices"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =======================================================
+             USERS VIEW
+        ======================================================== -->
+        <section id="view-users" class="view">
+            <h2>Users Management</h2>
+            <p class="subtext">Advanced table loaded below:</p>
+
+            <div id="usersTableContainer"></div>
+        </section>
+
+        <!-- =======================================================
+             SETTINGS VIEW
+        ======================================================== -->
+        <section id="view-settings" class="view">
+            <h2>Settings</h2>
+
+            <div class="settings-box">
+                <label>Name</label>
+                <input type="text" value="Renzzo Gracia Gomez">
+
+                <label>Email</label>
+                <input type="email" value="renzzo@example.com">
+
+                <label>Dark Mode</label>
+                <button id="settingsToggleTheme" class="btn-secondary">Toggle Dark Mode</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+
+</body>
+</html>

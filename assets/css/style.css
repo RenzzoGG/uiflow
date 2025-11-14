@@ -1,0 +1,411 @@
+/* ============================
+   UIFlow — Minimal SaaS Theme
+   Clean, modern, professional UI
+=============================== */
+
+:root {
+    --bg: #ffffff;
+    --text: #0f0f0f;
+    --subtext: #6e6e6e;
+    --primary: #4b6bff;
+    --primary-dark: #3a54d9;
+    --border: #e5e5e5;
+    --light-bg: #f5f7fa;
+    --radius: 14px;
+    --transition: 0.25s ease;
+    --max-width: 1200px;
+    --shadow: 0px 8px 20px rgba(0,0,0,0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", system-ui, sans-serif;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: var(--max-width);
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+}
+
+.logo {
+    height: 34px;
+}
+
+.nav-links a {
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 15px;
+    color: var(--subtext);
+    transition: var(--transition);
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+.nav-actions a {
+    margin-left: 12px;
+}
+
+/* ================= BUTTONS ================= */
+
+.btn-primary {
+    background: var(--primary);
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    background: var(--light-bg);
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--text);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.btn-secondary:hover {
+    background: white;
+    border-color: var(--primary);
+}
+
+.btn-login {
+    text-decoration: none;
+    color: var(--subtext);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-login:hover {
+    color: var(--primary);
+}
+
+/* ================= HERO ================= */
+
+.hero {
+    max-width: var(--max-width);
+    margin: 70px auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.hero-content {
+    flex: 1;
+}
+
+.hero h1 {
+    font-size: 3.3rem;
+    font-weight: 800;
+}
+
+.hero-sub {
+    margin: 15px 0 25px;
+    color: var(--subtext);
+    max-width: 500px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.hero-image img {
+    width: 500px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* ================= FEATURES ================= */
+
+.features {
+    max-width: var(--max-width);
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.feature-card {
+    background: var(--light-bg);
+    padding: 25px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.feature-card:hover {
+    background: white;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+}
+
+.feature-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* ================= SHOWCASE ================= */
+
+.showcase {
+    max-width: var(--max-width);
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.showcase-card {
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: var(--radius);
+    background: white;
+    transition: var(--transition);
+}
+
+.showcase-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-4px);
+}
+
+.showcase-card img {
+    width: 100%;
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+}
+
+/* ================= HOW IT WORKS ================= */
+
+.how {
+    max-width: var(--max-width);
+    margin: 100px auto;
+    padding: 0 20px;
+}
+
+.how-steps {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.step {
+    width: 260px;
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--light-bg);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.step:hover {
+    background: white;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+}
+
+.step-number {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+}
+
+/* ================= PRICING ================= */
+
+.pricing {
+    max-width: var(--max-width);
+    margin: 90px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.pricing-grid {
+    display: flex;
+    gap: 40px;          /* ← separación amplia */
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.price-card {
+    width: 260px;
+    padding: 35px 25px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: center;
+    transition: var(--transition);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.price-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.price-card.highlight {
+    border: 2px solid var(--primary);
+    box-shadow: 0 6px 18px rgba(75,107,255,0.15);
+}
+
+.price-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+.price {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin: 15px 0 25px;
+}
+
+.price-card p {
+    color: var(--subtext);
+    margin-bottom: 20px;
+}
+
+.price-card .btn-primary,
+.price-card .btn-secondary {
+    margin-top: 10px;
+    display: inline-block;
+}
+
+/* ================= FAQ ================= */
+
+.faq {
+    max-width: var(--max-width);
+    margin: 90px auto;
+    padding: 0 20px;
+}
+
+.faq-list {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.faq-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--light-bg);
+    padding: 18px;
+    transition: var(--transition);
+}
+
+.faq-item:hover {
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.faq-question {
+    width: 100%;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--text);
+}
+
+.faq-answer {
+    margin-top: 10px;
+    color: var(--subtext);
+    display: none;
+    line-height: 1.6;
+}
+
+.faq-item.open .faq-answer {
+    display: block;
+}
+
+/* ================= FOOTER ================= */
+
+.footer {
+    text-align: center;
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    color: var(--subtext);
+    margin-top: 80px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 850px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-image img {
+        width: 80%;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav-links { display: none; }
+
+    .hero h1 {
+        font-size: 2.3rem;
+    }
+}
