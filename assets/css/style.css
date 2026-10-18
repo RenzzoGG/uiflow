@@ -201,7 +201,8 @@ body {
 
 .showcase-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    /* 2 columnas solo si cada una mide al menos 420px; si no, 1 columna a lo ancho */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
     gap: 30px;
     margin-top: 30px;
 }
@@ -220,9 +221,10 @@ body {
 }
 
 .showcase-card img {
+    display: block;
     width: 100%;
+    height: auto;
     border-radius: var(--radius);
-    margin-bottom: 12px;
 }
 
 /* ================= HOW IT WORKS ================= */
