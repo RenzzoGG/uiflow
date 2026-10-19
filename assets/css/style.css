@@ -52,7 +52,9 @@ body {
 }
 
 .logo {
-    height: 34px;
+    display: block;
+    height: 32px;
+    width: auto;
 }
 
 .nav-links a {
@@ -65,6 +67,10 @@ body {
 
 .nav-links a:hover {
     color: var(--primary);
+}
+
+.nav-actions {
+    white-space: nowrap;
 }
 
 .nav-actions a {
@@ -404,8 +410,23 @@ body {
     }
 }
 
-@media (max-width: 600px) {
+/* Con el logo a tamaño completo el menú no cabe en una línea por debajo de ~700px */
+@media (max-width: 700px) {
     .nav-links { display: none; }
+}
+
+@media (max-width: 600px) {
+    .logo {
+        height: 24px;
+    }
+
+    .nav-actions a {
+        margin-left: 8px;
+    }
+
+    .nav-actions .btn-primary {
+        padding: 8px 14px;
+    }
 
     .hero h1 {
         font-size: 2.3rem;
