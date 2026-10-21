@@ -1,9 +1,14 @@
 // FAQ toggle
 document.querySelectorAll(".faq-item").forEach(item => {
-    item.querySelector(".faq-question").addEventListener("click", () => {
-        item.classList.toggle("open");
+    const question = item.querySelector(".faq-question");
+    question.addEventListener("click", () => {
+        const open = item.classList.toggle("open");
+        question.setAttribute("aria-expanded", String(open));
     });
 });
+
+// Footer year
+document.getElementById("year").textContent = new Date().getFullYear();
 
 // Mobile menu (hamburger)
 const navbar = document.querySelector(".navbar");
