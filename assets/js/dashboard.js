@@ -45,6 +45,42 @@ const dataSets = {
 };
 
 /* =============================
+   CHART THEME
+   Ejes y cuadrícula toman los colores de las variables CSS
+============================= */
+
+function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function setChartDefaults() {
+    Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+    Chart.defaults.color = cssVar("--chart-text");
+    Chart.defaults.borderColor = cssVar("--chart-grid");
+}
+
+function applyChartTheme() {
+    setChartDefaults();
+    // Los gráficos ya creados copiaron los colores al crearse: se actualizan uno a uno
+    Object.values(Chart.instances).forEach(chart => {
+        const scales = chart.options.scales || {};
+        Object.values(scales).forEach(scale => {
+            if (scale.ticks) scale.ticks.color = Chart.defaults.color;
+            if (scale.grid) scale.grid.color = Chart.defaults.borderColor;
+        });
+        if (chart.options.plugins?.legend?.labels) {
+            chart.options.plugins.legend.labels.color = Chart.defaults.color;
+        }
+        if (chart.config.type === "doughnut") {
+            chart.data.datasets[0].borderColor = cssVar("--surface");
+        }
+        chart.update("none");
+    });
+}
+
+setChartDefaults();
+
+/* =============================
    DASHBOARD CHART
 ============================= */
 
@@ -121,21 +157,25 @@ menuItems.forEach(item => {
 
 /* =====================================================
    DARK MODE
+   (el script del <head> ya aplicó el tema guardado)
 ===================================================== */
 
-const body = document.body;
+const root = document.documentElement;
 const themeBtn = document.getElementById("themeToggle");
 
-if (localStorage.getItem("theme") === "dark") {
-    body.classList.add("dark");
-    themeBtn.textContent = "☀️";
+function syncThemeButton() {
+    const isDark = root.classList.contains("dark");
+    themeBtn.textContent = isDark ? "☀️" : "🌙";
+    themeBtn.setAttribute("aria-pressed", String(isDark));
 }
 
+syncThemeButton();
+
 themeBtn.addEventListener("click", () => {
-    body.classList.toggle("dark");
-    const isDark = body.classList.contains("dark");
-    themeBtn.textContent = isDark ? "☀️" : "🌙";
-    localStorage.setItem("theme", isDark ? "dark" : "light");
+    const isDark = root.classList.toggle("dark");
+    try { localStorage.setItem("theme", isDark ? "dark" : "light"); } catch (e) {}
+    syncThemeButton();
+    applyChartTheme();
 });
 
 /* =====================================================
@@ -297,7 +337,8 @@ function loadAnalyticsCharts(range = 7) {
             labels: ["Mobile","Desktop","Tablet"],
             datasets: [{
                 data: [62,28,10],
-                backgroundColor: ["#4b6bff","#3a54d9","#a6b4ff"]
+                backgroundColor: ["#4b6bff","#3a54d9","#a6b4ff"],
+                borderColor: cssVar("--surface")
             }]
         },
         options: { responsive: true, maintainAspectRatio: false }
