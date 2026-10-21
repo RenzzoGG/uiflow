@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UIFlow Dashboard</title>
+    <meta name="description" content="UIFlow admin dashboard demo: KPIs, revenue and analytics charts, a searchable users table and dark mode.">
 
     <!-- Aplica el tema antes de pintar para evitar un destello blanco en modo oscuro -->
     <script>
@@ -23,81 +24,88 @@
 
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar">
-        <a href="index.html" class="sidebar-header">
+        <a href="index.html" class="sidebar-header" aria-label="UIFlow home">
             <img src="favicon.svg" alt="" class="sidebar-logo" width="34" height="34">
-            <h2>UIFlow</h2>
+            <span class="sidebar-brand">UIFlow</span>
         </a>
 
-        <nav class="sidebar-menu">
-            <a class="active">Dashboard</a>
-            <a>Analytics</a>
-            
+        <nav class="sidebar-menu" aria-label="Dashboard sections">
+            <button type="button" class="nav-item active" data-view="dashboard" aria-current="page">Dashboard</button>
+            <button type="button" class="nav-item" data-view="analytics">Analytics</button>
         </nav>
     </aside>
 
     <!-- ===== MAIN APP WRAPPER ===== -->
     <main class="main">
 
+        <!-- Top bar (común a las dos vistas) -->
+        <header class="topbar">
+            <div class="page-heading">
+                <h1 id="pageTitle">Dashboard</h1>
+                <p id="pageSubtitle" class="subtext">Welcome back, Alex. Here's what's happening with your product.</p>
+            </div>
+
+            <div class="topbar-actions">
+                <input type="search" id="globalSearch" class="search" placeholder="Search users..." aria-label="Search users">
+
+                <button type="button" id="themeToggle" class="theme-btn" aria-label="Dark mode" aria-pressed="false">
+                    <!-- Luna en modo claro, sol en modo oscuro (lo decide el CSS) -->
+                    <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></svg>
+                </button>
+
+                <div class="user-box">
+                    <span class="user-avatar" aria-hidden="true">AM</span>
+                    <span class="user-name">Alex Morgan</span>
+                </div>
+            </div>
+        </header>
+
         <!-- =======================================================
              DASHBOARD VIEW
         ======================================================== -->
-        <section id="view-dashboard" class="view active">
-
-            <!-- Top bar -->
-            <header class="topbar">
-                <input type="text" class="search" placeholder="Search...">
-
-                <div class="topbar-actions">
-                    <button id="themeToggle" class="theme-btn">🌙</button>
-
-                    <div class="user-box">
-                        <img src="assets/img/ui_image_1.webp" alt="" class="user-avatar">
-                        <span>Renzzo</span>
-                    </div>
-                </div>
-            </header>
+        <section id="view-dashboard" class="view active" aria-labelledby="pageTitle">
 
             <!-- Stats cards -->
-            <section class="cards">
+            <div class="cards">
 
                 <div class="card">
-                    <h3>$12,430</h3>
-                    <p>Revenue</p>
+                    <p class="kpi-value" data-kpi="revenue">$4,500</p>
+                    <p class="kpi-label">Revenue</p>
                 </div>
 
                 <div class="card">
-                    <h3>1,204</h3>
-                    <p>Active Users</p>
+                    <p class="kpi-value" data-kpi="users">128</p>
+                    <p class="kpi-label">Active Users</p>
                 </div>
 
                 <div class="card">
-                    <h3>3m 21s</h3>
-                    <p>Avg. Session</p>
+                    <p class="kpi-value" data-kpi="session">3m 05s</p>
+                    <p class="kpi-label">Avg. Session</p>
                 </div>
 
                 <div class="card">
-                    <h3>12.4%</h3>
-                    <p>Conversion</p>
+                    <p class="kpi-value" data-kpi="conversion">4.8%</p>
+                    <p class="kpi-label">Conversion</p>
                 </div>
 
-            </section>
+            </div>
 
             <!-- Revenue Chart -->
             <section class="chart-box">
                 <div class="chart-header">
                     <h2>Revenue Overview</h2>
 
-                    <div class="chart-filters">
-                        <button class="dash-filter active" data-range="7">7D</button>
-                        <button class="dash-filter" data-range="30">30D</button>
-                        <button class="dash-filter" data-range="90">90D</button>
-                        <button class="dash-filter" data-range="365">1Y</button>
+                    <div class="range-group" role="group" aria-label="Revenue range">
+                        <button type="button" class="range-btn" data-range="7" aria-pressed="true">7D</button>
+                        <button type="button" class="range-btn" data-range="30" aria-pressed="false">30D</button>
+                        <button type="button" class="range-btn" data-range="90" aria-pressed="false">90D</button>
+                        <button type="button" class="range-btn" data-range="365" aria-pressed="false">1Y</button>
                     </div>
-
                 </div>
 
                 <div class="chart-wrap">
-                    <canvas id="chart"></canvas>
+                    <canvas id="chart" role="img" aria-label="Revenue line chart for the selected range"></canvas>
                 </div>
             </section>
 
@@ -106,24 +114,26 @@
                 <div class="table-header">
                     <h2>Users</h2>
 
-                    <input type="text" id="tableSearch" class="table-search" placeholder="Search users...">
+                    <input type="search" id="tableSearch" class="table-search" placeholder="Search users..." aria-label="Search users">
                 </div>
 
-                <table id="usersTable">
-                    <thead>
-                        <tr>
-                            <th data-col="name">Name ▲</th>
-                            <th data-col="email">Email</th>
-                            <th data-col="status">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-scroll">
+                    <table id="usersTable">
+                        <thead>
+                            <tr>
+                                <th data-col="name" aria-sort="ascending"><button type="button" class="sort-btn">Name <span class="sort-icon" aria-hidden="true"></span></button></th>
+                                <th data-col="email" aria-sort="none"><button type="button" class="sort-btn">Email <span class="sort-icon" aria-hidden="true"></span></button></th>
+                                <th data-col="status" aria-sort="none"><button type="button" class="sort-btn">Status <span class="sort-icon" aria-hidden="true"></span></button></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
 
                 <div class="pagination">
-                    <button id="prevPage" class="page-btn">◀</button>
-                    <span id="pageInfo"></span>
-                    <button id="nextPage" class="page-btn">▶</button>
+                    <button type="button" id="prevPage" class="page-btn" aria-label="Previous page">◀</button>
+                    <span id="pageInfo" aria-live="polite"></span>
+                    <button type="button" id="nextPage" class="page-btn" aria-label="Next page">▶</button>
                 </div>
             </section>
 
@@ -132,93 +142,62 @@
         <!-- =======================================================
              ANALYTICS VIEW
         ======================================================== -->
-        <section id="view-analytics" class="view">
-
-            <h2>Analytics Overview</h2>
-            <p class="subtext">Track performance, insights and real-time application metrics.</p>
+        <section id="view-analytics" class="view" aria-labelledby="pageTitle">
 
             <!-- TOP STATS -->
             <div class="analytics-stats">
                 <div class="a-card">
-                    <h3>$14,920</h3>
-                    <p>Total Revenue</p>
+                    <p class="kpi-value" data-akpi="revenue">$14,920</p>
+                    <p class="kpi-label">Total Revenue</p>
                 </div>
                 <div class="a-card">
-                    <h3>8,312</h3>
-                    <p>Monthly Active Users</p>
+                    <p class="kpi-value" data-akpi="users">8,312</p>
+                    <p class="kpi-label">Monthly Active Users</p>
                 </div>
                 <div class="a-card">
-                    <h3>3.8%</h3>
-                    <p>Churn Rate</p>
+                    <p class="kpi-value" data-akpi="churn">3.8%</p>
+                    <p class="kpi-label">Churn Rate</p>
                 </div>
                 <div class="a-card">
-                    <h3>742</h3>
-                    <p>New Signups</p>
+                    <p class="kpi-value" data-akpi="signups">742</p>
+                    <p class="kpi-label">New Signups</p>
                 </div>
             </div>
 
             <!-- RANGE FILTERS -->
-            <div class="a-filters">
-                <button class="analytics-filter active" data-range="7">7D</button>
-                <button class="analytics-filter" data-range="30">30D</button>
-                <button class="analytics-filter" data-range="90">90D</button>
-                <button class="analytics-filter" data-range="365">1Y</button>
+            <div class="range-group a-filters" role="group" aria-label="Analytics range">
+                <button type="button" class="range-btn" data-range="7" aria-pressed="true">7D</button>
+                <button type="button" class="range-btn" data-range="30" aria-pressed="false">30D</button>
+                <button type="button" class="range-btn" data-range="90" aria-pressed="false">90D</button>
+                <button type="button" class="range-btn" data-range="365" aria-pressed="false">1Y</button>
             </div>
 
             <!-- ANALYTICS CHARTS -->
             <div class="analytics-grid">
 
-                <div class="analytics-card">
-                    <h3>Revenue</h3>
+                <div class="analytics-card analytics-card-wide">
+                    <h2>Revenue</h2>
                     <div class="chart-wrap">
-                        <canvas id="analyticsChart"></canvas>
+                        <canvas id="analyticsChart" role="img" aria-label="Revenue line chart"></canvas>
                     </div>
                 </div>
 
                 <div class="analytics-card">
-                    <h3>Users Growth</h3>
+                    <h2>Users Growth</h2>
                     <div class="chart-wrap">
-                        <canvas id="analyticsChartUsers"></canvas>
+                        <canvas id="analyticsChartUsers" role="img" aria-label="New users bar chart"></canvas>
                     </div>
                 </div>
 
                 <div class="analytics-card">
-                    <h3>Device Distribution</h3>
+                    <h2>Device Distribution</h2>
                     <div class="chart-wrap">
-                        <canvas id="analyticsChartDevices"></canvas>
+                        <canvas id="analyticsChartDevices" role="img" aria-label="Users by device doughnut chart"></canvas>
                     </div>
                 </div>
 
             </div>
 
-        </section>
-
-        <!-- =======================================================
-             USERS VIEW
-        ======================================================== -->
-        <section id="view-users" class="view">
-            <h2>Users Management</h2>
-            <p class="subtext">Advanced table loaded below:</p>
-
-            <div id="usersTableContainer"></div>
-        </section>
-
-        <!-- =======================================================
-             SETTINGS VIEW
-        ======================================================== -->
-        <section id="view-settings" class="view">
-            <h2>Settings</h2>
-
-            <div class="settings-box">
-                <label>Name</label>
-                <input type="text" value="Renzzo Gracia Gomez">
-
-                <label>Email</label>
-                <input type="email" value="renzzo@example.com">
-
-                <label>Dark Mode</label>
-                <button id="settingsToggleTheme" class="btn-secondary">Toggle Dark Mode</button>
-            </div>
         </section>
 
     </main>

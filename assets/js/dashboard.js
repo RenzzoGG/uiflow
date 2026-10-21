@@ -1,57 +1,38 @@
 /* =====================================================
-   UIFlow Dashboard — Chart + Dynamic Filters
+   UIFlow Dashboard — Charts, views, users table, dark mode
+   Todos los datos son de ejemplo y fijos (sin backend)
 ===================================================== */
 
 /* =============================
-   DASHBOARD CHART DATA
+   HELPERS
 ============================= */
 
-const dataSets = {
-    7: {
-        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        data: [400, 550, 510, 620, 700, 820, 900],
-        revenue: "$900",
-        users: "128",
-        session: "3m 05s",
-        conversion: "4.8%"
-    },
+// Serie determinista con tendencia al alza y algo de ondulación
+function series(length, base, step, wave) {
+    return Array.from({ length }, (_, i) => Math.round(base + i * step + Math.sin(i * 1.3) * wave));
+}
 
-    30: {
-        labels: Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`),
-        data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 1000)),
-        revenue: "$4,320",
-        users: "1,204",
-        session: "3m 21s",
-        conversion: "12.4%"
-    },
+const sum = values => values.reduce((a, b) => a + b, 0);
+const money = value => "$" + value.toLocaleString("en-US");
+const number = value => value.toLocaleString("en-US");
 
-    90: {
-        labels: ["W1", "W2", "W3", "W4", "W5", "W6"],
-        data: [1200, 1400, 1600, 1300, 1700, 2000],
-        revenue: "$8,950",
-        users: "3,842",
-        session: "3m 44s",
-        conversion: "15.6%"
-    },
+function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
 
-    365: {
-        labels: ["Q1", "Q2", "Q3", "Q4"],
-        data: [3500, 4300, 3900, 5100],
-        revenue: "$22,900",
-        users: "14,120",
-        session: "4m 24s",
-        conversion: "22.7%"
-    }
-};
+// Marca como activo el botón pulsado dentro de su grupo de rangos
+function setPressed(group, activeBtn) {
+    group.querySelectorAll(".range-btn").forEach(btn => {
+        btn.setAttribute("aria-pressed", String(btn === activeBtn));
+    });
+}
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /* =============================
    CHART THEME
    Ejes y cuadrícula toman los colores de las variables CSS
 ============================= */
-
-function cssVar(name) {
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-}
 
 function setChartDefaults() {
     Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
@@ -63,8 +44,7 @@ function applyChartTheme() {
     setChartDefaults();
     // Los gráficos ya creados copiaron los colores al crearse: se actualizan uno a uno
     Object.values(Chart.instances).forEach(chart => {
-        const scales = chart.options.scales || {};
-        Object.values(scales).forEach(scale => {
+        Object.values(chart.options.scales || {}).forEach(scale => {
             if (scale.ticks) scale.ticks.color = Chart.defaults.color;
             if (scale.grid) scale.grid.color = Chart.defaults.borderColor;
         });
@@ -81,78 +61,255 @@ function applyChartTheme() {
 setChartDefaults();
 
 /* =============================
+   DASHBOARD CHART DATA
+============================= */
+
+const dataSets = {
+    7: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        data: [400, 550, 510, 620, 700, 820, 900],
+        users: "128",
+        session: "3m 05s",
+        conversion: "4.8%"
+    },
+    30: {
+        labels: Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`),
+        data: series(30, 450, 12, 90),
+        users: "1,204",
+        session: "3m 21s",
+        conversion: "12.4%"
+    },
+    90: {
+        labels: Array.from({ length: 13 }, (_, i) => `W${i + 1}`),
+        data: series(13, 3200, 180, 350),
+        users: "3,842",
+        session: "3m 44s",
+        conversion: "15.6%"
+    },
+    365: {
+        labels: MONTHS,
+        data: [12400, 13100, 12800, 14200, 15000, 14600, 16100, 16900, 16400, 17800, 18500, 19900],
+        users: "14,120",
+        session: "4m 24s",
+        conversion: "22.7%"
+    }
+};
+
+/* =============================
    DASHBOARD CHART
 ============================= */
 
-const dashCanvas = document.getElementById("chart");
-let dashChart = null;
+const dashChart = new Chart(document.getElementById("chart"), {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Revenue",
+            data: [],
+            borderColor: "#4b6bff",
+            backgroundColor: "rgba(75,107,255,0.16)",
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointRadius: 3,
+            pointBackgroundColor: "#4b6bff"
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { ticks: { maxTicksLimit: 8 } } }
+    }
+});
 
-function loadDashboardChart(range = 7) {
+function loadDashboardRange(range) {
     const set = dataSets[range];
 
-    if (dashChart) dashChart.destroy();
+    dashChart.data.labels = set.labels;
+    dashChart.data.datasets[0].data = set.data;
+    dashChart.update();
 
-    dashChart = new Chart(dashCanvas, {
-        type: "line",
-        data: {
-            labels: set.labels,
-            datasets: [{
-                data: set.data,
-                borderColor: "#4b6bff",
-                backgroundColor: "rgba(75,107,255,0.16)",
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-                pointRadius: 3,
-                pointBackgroundColor: "#4b6bff"
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } }
-        }
-    });
-
-    document.querySelectorAll(".card")[0].querySelector("h3").innerText = set.revenue;
-    document.querySelectorAll(".card")[1].querySelector("h3").innerText = set.users;
-    document.querySelectorAll(".card")[2].querySelector("h3").innerText = set.session;
-    document.querySelectorAll(".card")[3].querySelector("h3").innerText = set.conversion;
+    document.querySelector('[data-kpi="revenue"]').textContent = money(sum(set.data));
+    document.querySelector('[data-kpi="users"]').textContent = set.users;
+    document.querySelector('[data-kpi="session"]').textContent = set.session;
+    document.querySelector('[data-kpi="conversion"]').textContent = set.conversion;
 }
 
-loadDashboardChart(7);
+loadDashboardRange(7);
 
 /* DASHBOARD FILTER BUTTONS */
-document.querySelectorAll(".dash-filter").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".dash-filter").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
+const dashRangeGroup = document.querySelector("#view-dashboard .range-group");
 
-        loadDashboardChart(btn.dataset.range);
-    });
+dashRangeGroup.addEventListener("click", e => {
+    const btn = e.target.closest(".range-btn");
+    if (!btn) return;
+    setPressed(dashRangeGroup, btn);
+    loadDashboardRange(btn.dataset.range);
+});
+
+/* =====================================================
+   ANALYTICS — 3 CHARTS + RANGE SWITCHER
+===================================================== */
+
+const analyticsDatasets = {
+    7: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        revenue: [3200, 4100, 3800, 5100, 5600, 6200, 7000],
+        newUsers: [42, 58, 51, 73, 80, 95, 110],
+        devices: [62, 28, 10],
+        mau: "8,312",
+        churn: "3.8%"
+    },
+    30: {
+        labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+        revenue: [24500, 26800, 29100, 31400],
+        newUsers: [310, 365, 402, 455],
+        devices: [60, 30, 10],
+        mau: "8,540",
+        churn: "3.6%"
+    },
+    90: {
+        labels: Array.from({ length: 13 }, (_, i) => `W${i + 1}`),
+        revenue: series(13, 24000, 900, 1500),
+        newUsers: series(13, 300, 18, 40),
+        devices: [58, 31, 11],
+        mau: "9,105",
+        churn: "3.4%"
+    },
+    365: {
+        labels: MONTHS,
+        revenue: series(12, 95000, 4200, 6000),
+        newUsers: series(12, 1200, 85, 150),
+        devices: [55, 33, 12],
+        mau: "11,870",
+        churn: "3.1%"
+    }
+};
+
+const analyticsRevenueChart = new Chart(document.getElementById("analyticsChart"), {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Revenue",
+            data: [],
+            borderColor: "#4b6bff",
+            backgroundColor: "rgba(75,107,255,0.2)",
+            tension: 0.3,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { ticks: { maxTicksLimit: 7 } } }
+    }
+});
+
+const analyticsUsersChart = new Chart(document.getElementById("analyticsChartUsers"), {
+    type: "bar",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "New users",
+            data: [],
+            backgroundColor: "#4b6bff",
+            borderRadius: 6
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { ticks: { maxTicksLimit: 7 } } }
+    }
+});
+
+const analyticsDevicesChart = new Chart(document.getElementById("analyticsChartDevices"), {
+    type: "doughnut",
+    data: {
+        labels: ["Mobile", "Desktop", "Tablet"],
+        datasets: [{
+            data: [],
+            backgroundColor: ["#4b6bff", "#3a54d9", "#a6b4ff"],
+            borderColor: cssVar("--surface")
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: "bottom" } }
+    }
+});
+
+function loadAnalyticsRange(range) {
+    const set = analyticsDatasets[range];
+
+    analyticsRevenueChart.data.labels = set.labels;
+    analyticsRevenueChart.data.datasets[0].data = set.revenue;
+    analyticsRevenueChart.update();
+
+    analyticsUsersChart.data.labels = set.labels;
+    analyticsUsersChart.data.datasets[0].data = set.newUsers;
+    analyticsUsersChart.update();
+
+    analyticsDevicesChart.data.datasets[0].data = set.devices;
+    analyticsDevicesChart.update();
+
+    document.querySelector('[data-akpi="revenue"]').textContent = money(sum(set.revenue));
+    document.querySelector('[data-akpi="users"]').textContent = set.mau;
+    document.querySelector('[data-akpi="churn"]').textContent = set.churn;
+    document.querySelector('[data-akpi="signups"]').textContent = number(sum(set.newUsers));
+}
+
+loadAnalyticsRange(7);
+
+const analyticsRangeGroup = document.querySelector("#view-analytics .range-group");
+
+analyticsRangeGroup.addEventListener("click", e => {
+    const btn = e.target.closest(".range-btn");
+    if (!btn) return;
+    setPressed(analyticsRangeGroup, btn);
+    loadAnalyticsRange(btn.dataset.range);
 });
 
 /* =====================================================
    SPA NAVIGATION
 ===================================================== */
 
-const menuItems = document.querySelectorAll(".sidebar-menu a");
-const views = document.querySelectorAll(".view");
+const viewInfo = {
+    dashboard: {
+        title: "Dashboard",
+        subtitle: "Welcome back, Alex. Here's what's happening with your product."
+    },
+    analytics: {
+        title: "Analytics",
+        subtitle: "Track performance, insights and real-time application metrics."
+    }
+};
 
-menuItems.forEach(item => {
-    item.addEventListener("click", () => {
-        menuItems.forEach(i => i.classList.remove("active"));
-        item.classList.add("active");
+const navItems = document.querySelectorAll(".nav-item");
 
-        views.forEach(v => v.classList.remove("active"));
-
-        const target = item.textContent.trim().toLowerCase();
-
-        if (target === "dashboard") document.getElementById("view-dashboard").classList.add("active");
-        if (target === "analytics") document.getElementById("view-analytics").classList.add("active");
-        if (target === "users") document.getElementById("view-users").classList.add("active");
-        if (target === "settings") document.getElementById("view-settings").classList.add("active");
+function showView(name) {
+    navItems.forEach(item => {
+        const active = item.dataset.view === name;
+        item.classList.toggle("active", active);
+        if (active) item.setAttribute("aria-current", "page");
+        else item.removeAttribute("aria-current");
     });
+
+    document.querySelectorAll(".view").forEach(view => {
+        view.classList.toggle("active", view.id === `view-${name}`);
+    });
+
+    document.getElementById("pageTitle").textContent = viewInfo[name].title;
+    document.getElementById("pageSubtitle").textContent = viewInfo[name].subtitle;
+}
+
+navItems.forEach(item => {
+    item.addEventListener("click", () => showView(item.dataset.view));
 });
 
 /* =====================================================
@@ -165,7 +322,6 @@ const themeBtn = document.getElementById("themeToggle");
 
 function syncThemeButton() {
     const isDark = root.classList.contains("dark");
-    themeBtn.textContent = isDark ? "☀️" : "🌙";
     themeBtn.setAttribute("aria-pressed", String(isDark));
 }
 
@@ -180,6 +336,7 @@ themeBtn.addEventListener("click", () => {
 
 /* =====================================================
    USERS TABLE SYSTEM
+   Un solo estado; búsqueda, orden y paginación se combinan en render()
 ===================================================== */
 
 const users = [
@@ -196,163 +353,108 @@ const users = [
     { name: "Daniela Castro", email: "dani@mail.com", status: "Active" },
 ];
 
-let currentPage = 1;
 const rowsPerPage = 6;
+const tableState = { query: "", sortCol: "name", sortDir: "asc", page: 1 };
 
-function renderTable(data) {
-    const tbody = document.querySelector("#usersTable tbody");
-    tbody.innerHTML = "";
+const tbody = document.querySelector("#usersTable tbody");
+const headers = document.querySelectorAll("#usersTable th[data-col]");
+const prevBtn = document.getElementById("prevPage");
+const nextBtn = document.getElementById("nextPage");
+const searchInputs = [document.getElementById("tableSearch"), document.getElementById("globalSearch")];
 
-    const start = (currentPage - 1) * rowsPerPage;
-    const paginated = data.slice(start, start + rowsPerPage);
+function visibleUsers() {
+    const text = tableState.query.toLowerCase();
+    const dir = tableState.sortDir === "asc" ? 1 : -1;
 
-    paginated.forEach(user => {
-        tbody.innerHTML += `
-            <tr>
-                <td>${user.name}</td>
-                <td>${user.email}</td>
-                <td><span class="status ${user.status.toLowerCase()}">${user.status}</span></td>
-            </tr>
-        `;
-    });
-
-    document.getElementById("pageInfo").innerText =
-        `Page ${currentPage} of ${Math.ceil(data.length / rowsPerPage)}`;
+    return users
+        .filter(user =>
+            user.name.toLowerCase().includes(text) ||
+            user.email.toLowerCase().includes(text) ||
+            user.status.toLowerCase().includes(text)
+        )
+        .sort((a, b) => a[tableState.sortCol].localeCompare(b[tableState.sortCol]) * dir);
 }
 
-renderTable(users);
+function renderTable() {
+    const rows = visibleUsers();
+    const pages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
+    tableState.page = Math.min(tableState.page, pages);
+
+    const start = (tableState.page - 1) * rowsPerPage;
+    tbody.replaceChildren();
+
+    rows.slice(start, start + rowsPerPage).forEach(user => {
+        const tr = document.createElement("tr");
+        [user.name, user.email].forEach(value => {
+            const td = document.createElement("td");
+            td.textContent = value;
+            tr.append(td);
+        });
+        const statusCell = document.createElement("td");
+        const badge = document.createElement("span");
+        badge.className = `status ${user.status.toLowerCase()}`;
+        badge.textContent = user.status;
+        statusCell.append(badge);
+        tr.append(statusCell);
+        tbody.append(tr);
+    });
+
+    if (rows.length === 0) {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 3;
+        td.className = "empty-row";
+        td.textContent = "No users found.";
+        tr.append(td);
+        tbody.append(tr);
+    }
+
+    headers.forEach(th => {
+        const sorted = th.dataset.col === tableState.sortCol;
+        th.setAttribute("aria-sort", sorted ? (tableState.sortDir === "asc" ? "ascending" : "descending") : "none");
+        th.querySelector(".sort-icon").textContent = sorted ? (tableState.sortDir === "asc" ? "▲" : "▼") : "";
+    });
+
+    document.getElementById("pageInfo").textContent = `Page ${tableState.page} of ${pages}`;
+    prevBtn.disabled = tableState.page <= 1;
+    nextBtn.disabled = tableState.page >= pages;
+}
+
+renderTable();
 
 /* Pagination */
-document.getElementById("nextPage").onclick = () => {
-    if (currentPage < Math.ceil(users.length / rowsPerPage)) {
-        currentPage++;
-        renderTable(users);
-    }
-};
+prevBtn.addEventListener("click", () => {
+    tableState.page--;
+    renderTable();
+});
 
-document.getElementById("prevPage").onclick = () => {
-    if (currentPage > 1) {
-        currentPage--;
-        renderTable(users);
-    }
-};
+nextBtn.addEventListener("click", () => {
+    tableState.page++;
+    renderTable();
+});
 
-/* Sorting */
-let sortDirection = true;
-
-document.querySelectorAll("th").forEach(th => {
-    th.addEventListener("click", () => {
+/* Sorting: clic en la misma columna invierte el orden */
+headers.forEach(th => {
+    th.querySelector(".sort-btn").addEventListener("click", () => {
         const col = th.dataset.col;
-        users.sort((a, b) =>
-            sortDirection
-                ? a[col].localeCompare(b[col])
-                : b[col].localeCompare(a[col])
-        );
-        sortDirection = !sortDirection;
-        currentPage = 1;
-        renderTable(users);
+        if (tableState.sortCol === col) {
+            tableState.sortDir = tableState.sortDir === "asc" ? "desc" : "asc";
+        } else {
+            tableState.sortCol = col;
+            tableState.sortDir = "asc";
+        }
+        tableState.page = 1;
+        renderTable();
     });
 });
 
-/* Search */
-document.getElementById("tableSearch").addEventListener("input", e => {
-    const text = e.target.value.toLowerCase();
-
-    const filtered = users.filter(user =>
-        user.name.toLowerCase().includes(text) ||
-        user.email.toLowerCase().includes(text) ||
-        user.status.toLowerCase().includes(text)
-    );
-
-    currentPage = 1;
-    renderTable(filtered);
-});
-
-/* =====================================================
-   ANALYTICS — 3 CHARTS + RANGE SWITCHER
-===================================================== */
-
-const analyticsRanges = document.querySelectorAll(".a-filter");
-
-/* CHART 1 – Revenue */
-let analyticsChart1;
-const chart1Canvas = document.getElementById("analyticsChart");
-
-/* CHART 2 – Users Growth */
-let analyticsChart2;
-const chart2Canvas = document.getElementById("analyticsChartUsers");
-
-/* CHART 3 – Devices */
-let analyticsChart3;
-const chart3Canvas = document.getElementById("analyticsChartDevices");
-
-const analyticsDatasets = {
-    7:   [3200, 4100, 3800, 5100, 5600, 6200, 7000],
-    30:  [2500, 2900, 3100, 3300, 3600, 3900, 4200],
-    90:  [2000, 2400, 2600, 2800, 3000, 3200, 3400],
-    365: [1500, 1600, 1800, 2100, 2400, 2600, 3000]
-};
-
-function loadAnalyticsCharts(range = 7) {
-
-    /* Chart 1 */
-    if (analyticsChart1) analyticsChart1.destroy();
-    analyticsChart1 = new Chart(chart1Canvas, {
-        type: "line",
-        data: {
-            labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-            datasets: [{
-                label: "Revenue",
-                data: analyticsDatasets[range],
-                borderColor: "#4b6bff",
-                backgroundColor: "rgba(75,107,255,0.2)",
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    /* Chart 2 */
-    if (analyticsChart2) analyticsChart2.destroy();
-    analyticsChart2 = new Chart(chart2Canvas, {
-        type: "bar",
-        data: {
-            labels: ["Jan","Feb","Mar","Apr","May","Jun"],
-            datasets: [{
-                label: "Users",
-                data: [800,950,1100,1300,1500,1850],
-                backgroundColor: "#3a54d9",
-                borderRadius: 8
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    /* Chart 3 */
-    if (analyticsChart3) analyticsChart3.destroy();
-    analyticsChart3 = new Chart(chart3Canvas, {
-        type: "doughnut",
-        data: {
-            labels: ["Mobile","Desktop","Tablet"],
-            datasets: [{
-                data: [62,28,10],
-                backgroundColor: ["#4b6bff","#3a54d9","#a6b4ff"],
-                borderColor: cssVar("--surface")
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-}
-
-/* Inicial */
-loadAnalyticsCharts(7);
-
-/* Range Filters */
-analyticsRanges.forEach(btn => {
-    btn.addEventListener("click", () => {
-        analyticsRanges.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        loadAnalyticsCharts(btn.dataset.range);
+/* Search: la caja de la topbar y la de la tabla filtran lo mismo y se sincronizan */
+searchInputs.forEach(input => {
+    input.addEventListener("input", () => {
+        tableState.query = input.value.trim();
+        tableState.page = 1;
+        searchInputs.forEach(other => { if (other !== input) other.value = input.value; });
+        if (input.id === "globalSearch") showView("dashboard");
+        renderTable();
     });
 });
