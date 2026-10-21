@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>UIFlow — Open Graph template</title>
+    <!--
+        Plantilla de la imagen Open Graph (assets/img/og-image.png, 1200×630).
+        No es una página del sitio: se abre con Chrome headless y se captura.
+        Las cifras y la gráfica son las del rango 7D de assets/js/dashboard.js
+        (lo que se ve al abrir el dashboard); si cambian allí, actualizarlas aquí.
+    -->
+    <style>
+        @font-face {
+            font-family: "Inter";
+            src: url("../assets/fonts/inter-latin-wght.woff2") format("woff2");
+            font-weight: 100 900;
+        }
+
+        /* Mismos tokens que el tema oscuro de dashboard.css */
+        :root {
+            --bg: #0b0d12;
+            --surface: #141821;
+            --surface-2: #1b2030;
+            --text: #e6e8ef;
+            --subtext: #9aa3b5;
+            --border: #262c3a;
+            --primary: #4b6bff;
+            --primary-light: rgba(75, 107, 255, 0.16);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body { width: 1200px; height: 630px; overflow: hidden; }
+
+        body {
+            display: flex;
+            align-items: center;
+            gap: 56px;
+            padding: 0 64px;
+            background:
+                radial-gradient(circle at 85% 20%, rgba(138, 92, 255, 0.22), transparent 45%),
+                radial-gradient(circle at 10% 100%, rgba(75, 107, 255, 0.18), transparent 50%),
+                var(--bg);
+            color: var(--text);
+            font-family: "Inter", system-ui, sans-serif;
+        }
+
+        /* ===== Texto ===== */
+        .intro { flex: 1; }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .brand img { width: 52px; height: 52px; }
+
+        h1 {
+            margin-top: 40px;
+            font-size: 58px;
+            line-height: 1.08;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .tagline {
+            margin-top: 22px;
+            font-size: 24px;
+            line-height: 1.4;
+            color: var(--subtext);
+        }
+
+        .url {
+            display: inline-block;
+            margin-top: 36px;
+            padding: 10px 20px;
+            border-radius: 999px;
+            background: var(--primary-light);
+            border: 1px solid rgba(75, 107, 255, 0.45);
+            color: #c3cdff;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        /* ===== Tarjeta tipo dashboard ===== */
+        .panel {
+            width: 520px;
+            padding: 24px;
+            border-radius: 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+        }
+
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .kpi {
+            padding: 14px 16px;
+            border-radius: 12px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+        }
+
+        .kpi-value { font-size: 26px; font-weight: 700; }
+        .kpi-label { margin-top: 2px; font-size: 15px; color: var(--subtext); }
+
+        .chart-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 22px 0 12px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .range {
+            padding: 4px 12px;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .chart { display: block; width: 100%; height: auto; }
+        .chart text { fill: var(--subtext); font-size: 13px; font-family: inherit; }
+    </style>
+</head>
+<body>
+
+    <div class="intro">
+        <div class="brand">
+            <img src="../favicon.svg" alt="">
+            UIFlow
+        </div>
+        <h1>Design Better Dashboards, Faster.</h1>
+        <p class="tagline">Concept SaaS product: landing page and a live admin dashboard demo.</p>
+        <p class="url">uiflow.renzzogg.com</p>
+    </div>
+
+    <div class="panel">
+        <div class="kpis">
+            <div class="kpi"><p class="kpi-value">$4,500</p><p class="kpi-label">Revenue</p></div>
+            <div class="kpi"><p class="kpi-value">128</p><p class="kpi-label">Active Users</p></div>
+            <div class="kpi"><p class="kpi-value">3m 05s</p><p class="kpi-label">Avg. Session</p></div>
+            <div class="kpi"><p class="kpi-value">4.8%</p><p class="kpi-label">Conversion</p></div>
+        </div>
+
+        <div class="chart-head">
+            <span>Revenue Overview</span>
+            <span class="range">7D</span>
+        </div>
+
+        <!-- Revenue 7D: 400, 550, 510, 620, 700, 820, 900 (eje y de 300 a 950, 170 px de alto) -->
+        <svg class="chart" viewBox="-20 -8 512 206" aria-hidden="true">
+            <defs>
+                <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#4b6bff" stop-opacity="0.35"/>
+                    <stop offset="1" stop-color="#4b6bff" stop-opacity="0"/>
+                </linearGradient>
+            </defs>
+            <g stroke="rgba(230,232,239,0.07)">
+                <line x1="0" y1="0" x2="472" y2="0"/>
+                <line x1="0" y1="57" x2="472" y2="57"/>
+                <line x1="0" y1="113" x2="472" y2="113"/>
+                <line x1="0" y1="170" x2="472" y2="170"/>
+            </g>
+            <path d="M0,143.8 L78.7,104.6 L157.3,115.1 L236,86.3 L314.7,65.4 L393.3,34 L472,13.1 L472,170 L0,170 Z" fill="url(#fill)"/>
+            <polyline points="0,143.8 78.7,104.6 157.3,115.1 236,86.3 314.7,65.4 393.3,34 472,13.1"
+                      fill="none" stroke="#4b6bff" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+            <g fill="#4b6bff">
+                <circle cx="0" cy="143.8" r="4.5"/><circle cx="78.7" cy="104.6" r="4.5"/>
+                <circle cx="157.3" cy="115.1" r="4.5"/><circle cx="236" cy="86.3" r="4.5"/>
+                <circle cx="314.7" cy="65.4" r="4.5"/><circle cx="393.3" cy="34" r="4.5"/>
+                <circle cx="472" cy="13.1" r="4.5"/>
+            </g>
+            <g text-anchor="middle">
+                <text x="0" y="194">Mon</text><text x="78.7" y="194">Tue</text>
+                <text x="157.3" y="194">Wed</text><text x="236" y="194">Thu</text>
+                <text x="314.7" y="194">Fri</text><text x="393.3" y="194">Sat</text>
+                <text x="472" y="194">Sun</text>
+            </g>
+        </svg>
+    </div>
+
+</body>
+</html>

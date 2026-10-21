@@ -24,7 +24,10 @@ assets/
 │   ├── app.js         # Landing: menú hamburguesa, acordeón del FAQ, año del footer
 │   └── dashboard.js   # Dashboard: gráficas, vistas, tabla, modo oscuro
 ├── fonts/             # Inter variable auto-alojada (woff2) + licencia OFL.txt
-└── img/               # Logo del navbar y capturas en WebP
+└── img/               # Logo del navbar, capturas en WebP y og-image.png (vista previa al compartir)
+docs/
+├── og-image.html      # Plantilla (noindex) de la imagen Open Graph
+└── screenshots/       # Capturas WebP que usa el README
 README.md
 CLAUDE.md
 .gitignore
@@ -32,6 +35,7 @@ CLAUDE.md
 
 - Las rutas a recursos propios son **relativas** (`assets/...`, `dashboard.html`, `index.html`); no deben depender de estar dentro del portafolio.
 - Los botones de acción de la landing (Log in, Get Started, Start for Free y los de Pricing) llevan a `dashboard.html`; el logo de la sidebar del dashboard vuelve a `index.html`.
+- Imagen Open Graph: `assets/img/og-image.png` (1200×630), la usan los `og:image`/`twitter:image` de ambas páginas con URL absoluta. Se genera capturando `docs/og-image.html` con Chrome headless a 1200×630 y escala 1 (en este equipo, el `chrome.exe` de Windows desde WSL con `--headless=new --screenshot`). Sus cifras y su gráfica son las del rango 7D de `dashboard.js`: si cambian allí, actualizar la plantilla y regenerar el PNG.
 - El servidor distingue mayúsculas en los nombres de archivo.
 - Logos: `favicon.svg` (solo el ícono; también lo usa la sidebar del dashboard junto al texto "UIFlow") y `logo-wordmark*.webp` (ícono + nombre con fondo transparente para el navbar de la landing, en 1x/2x/3x vía `srcset`). Si se regeneran, hacerlo desde el PNG original de 1024 px del historial (`git show 6557e43^:assets/img/Logo.png`).
 
