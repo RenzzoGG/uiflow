@@ -1,5 +1,11 @@
 # UIFlow
 
+![UIFlow landing page on desktop: hero with the headline "Design Better Dashboards, Faster." and a dashboard preview](docs/screenshots/landing-desktop.webp)
+
+![UIFlow admin dashboard in dark mode: KPI cards, a 7-day revenue line chart and the users table](docs/screenshots/dashboard-desktop-dark.webp)
+
+<img src="docs/screenshots/landing-mobile.webp" width="300" alt="UIFlow landing page on a phone: compact navbar with menu button, stacked headline and call-to-action buttons">
+
 UIFlow is a **fictional concept product**: a SaaS tool for designing admin dashboards. This repository contains its marketing landing page and a working admin dashboard demo, both built with plain HTML, CSS and JavaScript.
 
 **Live demo:**
