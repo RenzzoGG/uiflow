@@ -254,7 +254,7 @@ input {
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 25px;
     margin-bottom: 40px;
 }
@@ -276,6 +276,7 @@ input {
 .kpi-value {
     font-size: 1.8rem;
     font-weight: 700;
+    white-space: nowrap;
     line-height: 1.2;
     margin-bottom: 8px;
 }
@@ -367,6 +368,11 @@ input {
 
 .table-search {
     width: 220px;
+}
+
+/* Si la tabla no cabe, el scroll queda dentro de la tarjeta y no en la página */
+.table-scroll {
+    overflow-x: auto;
 }
 
 table {
@@ -478,7 +484,7 @@ table td {
 
 .analytics-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 20px;
     margin: 20px 0 30px;
 }
@@ -503,7 +509,7 @@ table td {
 
 .analytics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
     gap: 25px;
 }
 
@@ -533,23 +539,139 @@ table td {
    RESPONSIVE
    ============================================ */
 
+/* Tablet y móvil: la sidebar pasa a ser una barra superior con pestañas */
 @media (max-width: 900px) {
+    body {
+        display: block;
+    }
+
     .sidebar {
-        display: none;
+        position: sticky;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        height: auto;
+        padding: 10px 16px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-header {
+        margin-bottom: 0;
+        gap: 8px;
+    }
+
+    .sidebar-logo {
+        width: 28px;
+        height: 28px;
+    }
+
+    .sidebar-brand {
+        font-size: 1.15rem;
+    }
+
+    .sidebar-menu {
+        display: flex;
+        gap: 4px;
+    }
+
+    .nav-item {
+        width: auto;
+        margin-bottom: 0;
+        padding: 8px 14px;
+        border-radius: 10px;
     }
 
     .main {
         margin-left: 0;
+        padding: 24px 20px;
     }
 
     .topbar {
         flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
+        align-items: stretch;
+        gap: 16px;
     }
 
     .search {
+        flex: 1;
+        min-width: 0;
+        width: auto;
+    }
+
+    .kpi-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .main {
+        padding: 20px 16px;
+    }
+
+    .page-heading h1 {
+        font-size: 1.5rem;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .topbar-actions {
+        gap: 10px;
+    }
+
+    .cards,
+    .analytics-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .card,
+    .a-card {
+        padding: 16px;
+    }
+
+    .kpi-value,
+    .a-card .kpi-value {
+        font-size: 1.3rem;
+    }
+
+    .chart-box,
+    .table-box,
+    .analytics-card {
+        padding: 18px;
+    }
+
+    .chart-box {
+        margin-bottom: 24px;
+    }
+
+    .chart-header,
+    .table-header {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .chart-wrap,
+    .analytics-card .chart-wrap {
+        height: 240px;
+    }
+
+    .table-search {
         width: 100%;
+    }
+
+    .table-scroll table {
+        min-width: 460px;
+    }
+
+    .analytics-grid {
+        gap: 16px;
     }
 }
 
