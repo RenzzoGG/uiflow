@@ -21,7 +21,7 @@ assets/
 │   ├── style.css      # Estilos de la landing
 │   └── dashboard.css  # Estilos del dashboard (tema claro/oscuro)
 ├── js/
-│   ├── app.js         # Landing: acordeón del FAQ
+│   ├── app.js         # Landing: menú hamburguesa, acordeón del FAQ, año del footer
 │   └── dashboard.js   # Dashboard: gráficas, vistas, tabla, modo oscuro
 ├── fonts/             # Inter variable auto-alojada (woff2) + licencia OFL.txt
 └── img/               # Logo del navbar y capturas en WebP
@@ -34,6 +34,13 @@ CLAUDE.md
 - Los botones de acción de la landing (Log in, Get Started, Start for Free y los de Pricing) llevan a `dashboard.html`; el logo de la sidebar del dashboard vuelve a `index.html`.
 - El servidor distingue mayúsculas en los nombres de archivo.
 - Logos: `favicon.svg` (solo el ícono; también lo usa la sidebar del dashboard junto al texto "UIFlow") y `logo-wordmark*.webp` (ícono + nombre con fondo transparente para el navbar de la landing, en 1x/2x/3x vía `srcset`). Si se regeneran, hacerlo desde el PNG original de 1024 px del historial (`git show 6557e43^:assets/img/Logo.png`).
+
+## Cache busting
+
+- Los CSS y JS locales se enlazan con un número de versión en la URL: `assets/css/style.css?v=2`, `assets/js/app.js?v=2`, `assets/css/dashboard.css?v=2`, `assets/js/dashboard.js?v=2`.
+- **Regla:** sube el número **una vez por publicación** (cada push a `main`) en los archivos que cambiaron desde la publicación anterior, y en **todas** las páginas que enlazan ese archivo. Si en la misma publicación haces varios commits sobre el mismo archivo, se sube una sola vez.
+- Por qué: el navegador (y cualquier caché intermedia) guarda los archivos por su URL. Si el archivo cambia pero la URL no, un visitante que ya entró puede seguir viendo el CSS/JS viejo mezclado con el HTML nuevo. Cambiar `?v=N` hace que sea otra URL y se descargue de nuevo.
+- No se versionan las imágenes ni la fuente (`inter-latin-wght.woff2`): cambian casi nunca. Si se reemplaza la fuente, cambiarle el nombre de archivo en el `@font-face` y en el `preload` a la vez.
 
 ## Forma de trabajo
 

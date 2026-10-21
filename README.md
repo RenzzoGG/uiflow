@@ -11,13 +11,14 @@ UIFlow is a **fictional concept product**: a SaaS tool for designing admin dashb
 
 - Hero section with product preview and calls to action that open the dashboard.
 - Features, showcase, "How it works", pricing plans and a FAQ with expandable answers.
-- Responsive layout with in-page navigation links.
+- Responsive layout with in-page navigation and an accessible hamburger menu on mobile.
 
 ## Admin dashboard (`dashboard.html`)
 
 - **Dashboard view:** KPI cards, a revenue line chart with 7D / 30D / 90D / 1Y ranges, and a users table with search, sorting by column and pagination.
 - **Analytics view:** KPI cards plus revenue, users growth and device distribution charts with selectable ranges.
-- **Dark mode:** toggle between light and dark themes; the choice is remembered with `localStorage`.
+- **Dark mode:** toggle between light and dark themes; the choice is remembered with `localStorage` and defaults to the system preference.
+- **Responsive:** on tablets and phones the sidebar becomes a top bar with Dashboard / Analytics tabs.
 - Clicking the UIFlow logo in the sidebar returns to the landing page.
 
 All data is sample data generated in the browser; there is no backend.
