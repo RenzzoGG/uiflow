@@ -17,16 +17,22 @@
                  srcset="assets/img/logo-wordmark.webp 1x, assets/img/logo-wordmark@2x.webp 2x, assets/img/logo-wordmark@3x.webp 3x"
                  width="133" height="32" alt="UIFlow" class="logo">
 
-            <nav class="nav-links">
+            <nav class="nav-links" id="nav-links" aria-label="Main">
                 <a href="#features">Features</a>
                 <a href="#showcase">Showcase</a>
                 <a href="#pricing">Pricing</a>
                 <a href="#faq">FAQ</a>
+                <a href="dashboard.html" class="nav-login-mobile">Log in</a>
             </nav>
 
             <div class="nav-actions">
                 <a href="dashboard.html" class="btn-login">Log in</a>
                 <a href="dashboard.html" class="btn-primary">Get Started</a>
+                <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+                    <span class="nav-toggle-bar"></span>
+                    <span class="nav-toggle-bar"></span>
+                    <span class="nav-toggle-bar"></span>
+                </button>
             </div>
         </div>
     </header>

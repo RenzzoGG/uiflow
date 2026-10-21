@@ -70,11 +70,57 @@ body {
 }
 
 .nav-actions {
+    display: flex;
+    align-items: center;
     white-space: nowrap;
 }
 
 .nav-actions a {
     margin-left: 12px;
+}
+
+/* Solo existe dentro del panel móvil */
+.nav-login-mobile {
+    display: none;
+}
+
+/* ===== Botón hamburguesa (visible solo en móvil) ===== */
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    margin-left: 10px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.nav-toggle-bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform var(--transition), opacity var(--transition);
+}
+
+/* Las 3 barras se convierten en una ✕ al abrir */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
 /* ================= BUTTONS ================= */
@@ -410,9 +456,40 @@ body {
     }
 }
 
-/* Con el logo a tamaño completo el menú no cabe en una línea por debajo de ~700px */
+/* Con el logo a tamaño completo el menú no cabe en una línea por debajo de ~700px:
+   se convierte en un panel desplegable que abre el botón hamburguesa */
 @media (max-width: 700px) {
-    .nav-links { display: none; }
+    .nav-toggle {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        padding: 8px 20px 16px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
+
+    .navbar.menu-open .nav-links {
+        display: flex;
+    }
+
+    .nav-links a {
+        margin: 0;
+        padding: 12px 4px;
+        font-size: 16px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .nav-links a:last-child {
+        border-bottom: none;
+    }
 }
 
 @media (max-width: 600px) {
@@ -422,6 +499,15 @@ body {
 
     .nav-actions a {
         margin-left: 8px;
+    }
+
+    /* "Log in" pasa al panel para que logo, Get Started y hamburguesa quepan a 375px */
+    .nav-actions .btn-login {
+        display: none;
+    }
+
+    .nav-login-mobile {
+        display: block;
     }
 
     .nav-actions .btn-primary {
