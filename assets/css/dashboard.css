@@ -2,6 +2,16 @@
    UIFlow Dashboard — Premium Minimal SaaS Style
    ============================================ */
 
+/* Inter variable (pesos 100–900), subconjunto latino, auto-alojada.
+   Origen: @fontsource-variable/inter@5.2.5 — licencia en assets/fonts/OFL.txt */
+@font-face {
+    font-family: "Inter";
+    src: url("../fonts/inter-latin-wght.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Todos los colores salen de estos tokens: .dark solo los redefine */
 :root {
     --bg: #f5f7fb;
@@ -55,7 +65,7 @@ body {
     min-height: 100vh;
     background: var(--bg);
     color: var(--text);
-    font-family: "Inter", system-ui, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     transition: background-color 0.25s, color 0.25s;
 }
 

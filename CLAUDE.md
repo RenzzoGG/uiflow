@@ -23,6 +23,7 @@ assets/
 ├── js/
 │   ├── app.js         # Landing: acordeón del FAQ
 │   └── dashboard.js   # Dashboard: gráficas, vistas, tabla, modo oscuro
+├── fonts/             # Inter variable auto-alojada (woff2) + licencia OFL.txt
 └── img/               # Logo del navbar y capturas en WebP
 README.md
 CLAUDE.md
@@ -48,6 +49,7 @@ CLAUDE.md
 
 - HTML, CSS y JavaScript puro, sin paso de build.
 - Librerías desde CDN, **siempre con versión exacta**: Chart.js 4.5.1 (jsDelivr).
+- Fuente: **Inter** auto-alojada en `assets/fonts/inter-latin-wght.woff2` (de `@fontsource-variable/inter@5.2.5`, subconjunto latino, pesos 100–900). Se declara con `@font-face` en ambos CSS y se precarga en ambos HTML. No usar Google Fonts.
 - Sin frameworks ni dependencias de npm, salvo que yo lo apruebe explícitamente. No crear `package.json` en la raíz: haría que Railpack trate el sitio como app de Node en lugar de estático.
 - Probar localmente con `python3 -m http.server 8000` → `http://localhost:8000` (landing) y `http://localhost:8000/dashboard.html` (dashboard).
 

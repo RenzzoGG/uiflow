@@ -28,6 +28,7 @@ All data is sample data generated in the browser; there is no backend.
 - CSS
 - JavaScript (no frameworks, no build step)
 - [Chart.js](https://www.chartjs.org/) 4.5.1 (loaded from jsDelivr)
+- [Inter](https://rsms.me/inter/) variable font, self-hosted (SIL Open Font License)
 
 ## Run it locally
 
